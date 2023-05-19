@@ -10,7 +10,7 @@
   "main": "index.js",
   "devDependencies": {},
   "scripts": {
-    "start":"node.js",
+    "start":"nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
