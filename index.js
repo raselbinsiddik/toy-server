@@ -32,6 +32,8 @@ async function run() {
 
         const toyCollection = client.db('toyMarket').collection('toyCategory');
 
+        const addToysCllection = client.db('toyDB').collection('toys');
+
         app.get('/toyCategory', async (req, res) => {
             const cursor = toyCollection.find();
             const result = await cursor.toArray();
@@ -41,6 +43,13 @@ async function run() {
             const id = req.params.id;
             const query = { _id: new ObjectId(id) };
             const result = await toyCollection.findOne(query);
+            res.send(result);
+        });
+
+        app.post('/addToys', async (req, res) => {
+            const newToys = req.body;
+            console.log(newToys);
+            const result = await addToysCllection.insertOne(newToys);
             res.send(result);
         });
 
