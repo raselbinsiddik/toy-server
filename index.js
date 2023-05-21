@@ -72,11 +72,14 @@ async function run() {
         });
 
         app.put('/addToys/:id', async (req, res) => {
+            console.log('put.....');
             const id = req.params.id;
+            console.log(id);
             const filter = { _id: new ObjectId(id) };
             const updateToys = req.body;
+            console.log("updateToys-",updateToys);
             const options = { upsert: true };
-            const toys = {
+            const toy = {
                 $set: {
                     name: updateToys.name,
                     quantity: updateToys.quantity,
@@ -84,12 +87,14 @@ async function run() {
                     description: updateToys.description,
                     category: updateToys.category,
                     photo: updateToys.photo,
-                    rating:updateToys.rating,
+                    rating: updateToys.rating
                 }
-            }
-            const result = await addToysCollection.updateOne(filter, toys, options);
+            };
+            const result = await addToysCollection.updateOne(filter, toy, options);
+            // const result = await addToysCollection.findOneAndUpdate({ _id: new ObjectId(id) }, toy, { returnDocument: "after" });
+console.log('result', result);
             res.send(result);
-        })
+        });
 
         app.delete('/addToys/:id', async (req, res) => {
             const id = req.params.id;
