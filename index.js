@@ -34,11 +34,13 @@ async function run() {
 
         const addToysCollection = client.db('toyDB').collection('toys');
 
+
         app.get('/toyCategory', async (req, res) => {
             const cursor = toyCollection.find();
             const result = await cursor.toArray();
             res.send(result);
         });
+        
         app.get('/toyCategory/:id', async (req, res) => {
             const id = req.params.id;
             const query = { _id: new ObjectId(id) };
@@ -72,12 +74,10 @@ async function run() {
         });
 
         app.put('/addToys/:id', async (req, res) => {
-            console.log('put.....');
             const id = req.params.id;
-            console.log(id);
             const filter = { _id: new ObjectId(id) };
             const updateToys = req.body;
-            console.log("updateToys-",updateToys);
+            console.log(updateToys);
             const options = { upsert: true };
             const toy = {
                 $set: {
@@ -92,7 +92,7 @@ async function run() {
             };
             const result = await addToysCollection.updateOne(filter, toy, options);
             // const result = await addToysCollection.findOneAndUpdate({ _id: new ObjectId(id) }, toy, { returnDocument: "after" });
-console.log('result', result);
+            console.log('result', result);
             res.send(result);
         });
 
