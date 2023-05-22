@@ -49,14 +49,39 @@ async function run() {
         });
 
         app.get('/addToys', async (req, res) => {
-            console.log(req.query.email);
+            const search = req.query.search;
+            console.log(search);
+
             let query = {};
             if (req.query?.email) {
                 query = { email: req.query.email };
             }
-            const result = await addToysCollection.find(query).toArray();
+
+            let result;
+            if (search) {
+                const nameQuery = { name: { $regex: search, $options: 'i' } };
+                result = await addToysCollection.find({ $and: [query, nameQuery] }).toArray();
+            } else {
+                result = await addToysCollection.find(query).toArray();
+            }
+
             res.send(result);
         });
+
+
+        // app.get('/addToys', async (req, res) => {
+        //     const search = req.query.search;
+        //     console.log(search);
+        //     const name = { name: { $regex: search, $options: 'i' } };
+
+        //     let query = {};
+        //     if (req.query?.email) {
+        //         query = { email: req.query.email };
+        //     }
+        //     const result = await addToysCollection.find(query, name).toArray();
+        //     res.send(result);
+        // });
+
 
         app.get('/addToys/:id', async (req, res) => {
             const id = req.params.id;
